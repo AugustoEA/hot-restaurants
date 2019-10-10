@@ -5,9 +5,9 @@ var bodyParser = require("body-parser")
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: false }));
 
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 var data = [
     {
@@ -19,6 +19,10 @@ var data = [
 var visitorCount = 0;
 app.get("/table", function (req, res) {
     res.sendFile(path.join(__dirname, "tables.html"));
+});
+
+app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "home.html"));
 });
 
 app.get("/api/home", function (req, res) {
@@ -47,10 +51,13 @@ app.get("/api/visitors", function (req, res) {
 
 app.post("/api/new", function(req, res){
     var tableData = req.body;
+   
     console.log(tableData)
+    data.push(tableData)
+    res.json(tableData);
 });
 
 
-app.use(bodyParser.json());
 app.listen(PORT, function () {
     console.log("listening on PORT" + PORT)
+});
